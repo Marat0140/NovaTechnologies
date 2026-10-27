@@ -1,17 +1,15 @@
 /* ==========================================================================
-   NOVA TECHNOLOGIES - CONFIGURACIÓN DE BASE DE DATOS (MongoDB)
+   NOVA TECHNOLOGIES - CONEXIÓN A MONGODB ATLAS
    ========================================================================== */
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      // Opciones de conexión modernas para Mongoose
-    });
-    console.log(`✅ MongoDB Conectado con éxito: ${conn.connection.host}`);
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`✅ MongoDB Atlas conectado con éxito: ${conn.connection.host}`);
   } catch (error) {
     console.error(`❌ Error al conectar a MongoDB: ${error.message}`);
-    process.exit(1);
+    process.exit(1); // Detiene la aplicación si la base de datos falla
   }
 };
 
