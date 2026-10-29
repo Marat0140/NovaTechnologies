@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Technologies | Panel de Técnico</title>
+    
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/components.css">
+</head>
+<body style="background-color: #0b0f19; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column;">
+
+    <!-- Navbar del Técnico -->
+    <header class="navbar" style="background: #111827; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="navbar-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; padding: 15px 20px;">
+            <a href="technician-dashboard.html" class="navbar-brand" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 18px;">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-name">Nova Technologies <span style="font-size: 12px; background: #10b981; color: #fff; padding: 2px 8px; border-radius: 10px; margin-left: 5px;">Técnico / Taller</span></span>
+            </a>
+            
+            <nav class="navbar-links" style="display: flex; gap: 20px; align-items: center;">
+                <a href="technician-dashboard.html" class="nav-link" style="color: #3b82f6; text-decoration: none; font-weight: 500;">Órdenes de Trabajo</a>
+                <a href="#" id="logoutBtn" style="color: #ef4444; text-decoration: none; font-weight: 500;">Cerrar Sesión</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main style="flex: 1; max-width: 1200px; width: 100%; margin: 30px auto; padding: 0 20px;">
+        
+        <!-- Tarjeta de Bienvenida y Estadísticas -->
+        <div style="background: #111827; border: 1px solid rgba(255,255,255,0.08); padding: 30px; border-radius: 16px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <h1 id="welcomeTech" style="font-size: 24px; margin-bottom: 6px;">¡Hola, Maestro Técnico!</h1>
+                <p style="color: #9ca3af; font-size: 14px;">Aquí puedes revisar las solicitudes de reparación asignadas a tus especialidades y gestionar presupuestos.</p>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <div style="background: #1f2937; padding: 12px 20px; border-radius: 10px; border: 1px solid #374151; text-align: center;">
+                    <span style="display: block; font-size: 20px; font-weight: bold; color: #3b82f6;" id="pendingCount">0</span>
+                    <span style="font-size: 12px; color: #9ca3af;">Pendientes</span>
+                </div>
+                <div style="background: #1f2937; padding: 12px 20px; border-radius: 10px; border: 1px solid #374151; text-align: center;">
+                    <span style="display: block; font-size: 20px; font-weight: bold; color: #10b981;" id="activeCount">0</span>
+                    <span style="font-size: 12px; color: #9ca3af;">En Proceso</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestañas de Navegación de Órdenes -->
+        <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
+            <button class="tab-btn active" data-tab="incoming" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #3b82f6; background: #3b82f6; color: white; cursor: pointer; font-weight: 500;">Solicitudes Entrantes</button>
+            <button class="tab-btn" data-tab="active" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #374151; background: #1f2937; color: #9ca3af; cursor: pointer; font-weight: 500;">Reparaciones en Curso</button>
+        </div>
+
+        <!-- Contenedor Dinámico de Órdenes -->
+        <div id="techRequestsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+            <p style="color: #9ca3af;">Cargando solicitudes...</p>
+        </div>
+
+    </main>
+
+    <!-- Script del Panel de Técnico -->
+    <script src="./js/technician-dashboard.js"></script>
+</body>
+</html>
