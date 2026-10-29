@@ -34,7 +34,19 @@ const repairRequestSchema = new mongoose.Schema({
     senderRole: { type: String, enum: ['client', 'technician'] },
     message: { type: String, required: true },
     timestamp: { type: Date, default: Date.now }
-  }]
+  }],
+
+  // Agrega o verifica estos campos dentro de tu repairRequestSchema:
+priceModification: {
+  newPrice: { type: Number, default: 0 },
+  status: { 
+    type: String, 
+    enum: ['none', 'pending', 'accepted', 'rejected'], 
+    default: 'none' 
+  }
+},
+cancellationOtp: { type: String }, // OTP requerido si rechaza la cotización o cambio de precio
+completionOtp: { type: String }   // OTP requerido para entregar el equipo completado
 }, { timestamps: true });
 
 module.exports = mongoose.model('RepairRequest', repairRequestSchema);

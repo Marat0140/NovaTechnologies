@@ -116,5 +116,4 @@ router.post('/complete-registration', async (req, res) => {
   }
 });
 
-
 module.exports = router;
