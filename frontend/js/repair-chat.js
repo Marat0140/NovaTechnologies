@@ -34,16 +34,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (res.ok) {
                 currentUserId = data.currentUserId;
                 currentRequest = data.request;
-                
-                // Determinamos el rol del usuario actual
                 userRole = currentRequest.clientId._id === currentUserId ? 'client' : 'technician';
 
                 renderOrderDetails(currentRequest);
-                renderInteractivePanel(currentRequest);
+                
+                // EVITAR EL BUG DEL INPUT: Si el usuario está escribiendo o el input tiene foco, no redibujamos el panel interactivo
+                const activeElement = document.activeElement;
+                const isTypingOtp = activeElement && (activeElement.id === 'otpInput' || activeElement.id === 'cancelOtpInput');
+                
+                if (!isTypingOtp) {
+                    renderInteractivePanel(currentRequest);
+                }
+
                 renderMessages(currentRequest.chatMessages);
+                checkChatLock(currentRequest.status);
             }
         } catch (error) {
             console.error('Error cargando el chat:', error);
+        }
+    }
+
+    // NUEVO: Bloquear chat si la orden está completada o cancelada
+    function checkChatLock(status) {
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        
+        if (status === 'completed' || status === 'cancelled') {
+            messageInput.disabled = true;
+            messageInput.placeholder = `Esta orden ya ha sido ${status === 'completed' ? 'completada' : 'cancelada'}. Chat bloqueado.`;
+            const submitBtn = chatForm.querySelector('button');
+            if (submitBtn) submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
         }
     }
 
@@ -60,13 +82,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Panel interactivo de acciones comerciales y de OTP
     function renderInteractivePanel(req) {
         const panel = document.getElementById('interactiveActionPanel');
         panel.style.display = 'none';
         panel.innerHTML = '';
 
-        // 1. CLIENTE: Cotización inicial disponible para Aceptar o Rechazar
+        if (req.status === 'completed' || req.status === 'cancelled') {
+            return; // No mostrar acciones si ya terminó
+        }
+
+        // 1. CLIENTE: Cotización inicial
         if (userRole === 'client' && req.status === 'quoted') {
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -78,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }
 
-        // 2. TÉCNICO: Ofrecer Re-cotización o solicitar OTP de Entrega durante la reparación
+        // 2. TÉCNICO: Opciones en reparación
         if (userRole === 'technician' && req.status === 'in_repair') {
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -89,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }
 
-        // 3. CLIENTE: Propuesta de cambio de precio pendiente
+        // 3. CLIENTE: Propuesta de cambio de precio
         if (userRole === 'client' && req.priceModification && req.priceModification.status === 'pending') {
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -101,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }
 
-        // 4. CLIENTE: Muestra su código OTP de entrega final cuando esté listo
+        // 4. CLIENTE: Ver OTP de entrega
         if (userRole === 'client' && req.completionOtp && req.status !== 'completed') {
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -112,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }
 
-        // 5. TÉCNICO: Ingresar código OTP entregado por el cliente
+        // 5. TÉCNICO: Ingresar OTP de finalización
         if (userRole === 'technician' && req.completionOtp && req.status !== 'completed') {
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -123,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }
 
-        // 6. TÉCNICO: Validar código OTP de cancelación (Revisión pagada)
+        // 6. TÉCNICO: Validar OTP de cancelación
         if (userRole === 'technician' && req.status === 'pending_cancellation') {
             panel.style.display = 'block';
             panel.innerHTML = `
@@ -157,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         box.scrollTop = box.scrollHeight;
     }
 
-    // Funciones Globales para botones de acción
+    // Funciones de botones de acción
     window.respondQuote = async (action) => {
         try {
             const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/respond-quote`, {
@@ -168,15 +193,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await res.json();
             alert(data.message);
             fetchChatData();
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     window.proposeNewPrice = async () => {
         const newPrice = prompt('Ingresa el nuevo valor del presupuesto para esta reparación:');
         if (!newPrice) return;
-
         try {
             const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/propose-price`, {
                 method: 'PUT',
@@ -186,9 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await res.json();
             alert(data.message);
             fetchChatData();
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     window.respondPriceMod = async (action) => {
@@ -201,27 +221,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await res.json();
             alert(data.message);
             fetchChatData();
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     window.requestCompletionOtp = async () => {
         try {
-            const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/request-completion-otp`, {
+            await fetch(`http://localhost:5000/api/repairs/${requestId}/request-completion-otp`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            const data = await res.json();
             alert('¡Código OTP generado y enviado al panel del cliente!');
             fetchChatData();
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     window.completeOrderWithOtp = async () => {
-        const otp = document.getElementById('otpInput').value.trim();
+        const otpInput = document.getElementById('otpInput');
+        const otp = otpInput ? otpInput.value.trim() : '';
         if (!otp) return alert('Por favor ingresa el código OTP dictado por el cliente.');
 
         try {
@@ -237,13 +253,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 alert(data.message || 'OTP incorrecto.');
             }
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
     window.confirmCancellationOtp = async () => {
-        const otp = document.getElementById('cancelOtpInput').value.trim();
+        const cancelOtpInput = document.getElementById('cancelOtpInput');
+        const otp = cancelOtpInput ? cancelOtpInput.value.trim() : '';
         if (!otp) return alert('Ingresa el OTP de cancelación.');
 
         try {
@@ -259,12 +274,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 alert(data.message);
             }
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     };
 
-    // Envío de mensajes del chat
     const chatForm = document.getElementById('chatForm');
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -286,9 +298,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 input.value = '';
                 fetchChatData();
             }
-        } catch (error) {
-            console.error('Error al enviar mensaje:', error);
-        }
+        } catch (error) { console.error('Error al enviar mensaje:', error); }
     });
 
     fetchChatData();
