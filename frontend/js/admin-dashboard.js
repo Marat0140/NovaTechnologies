@@ -116,9 +116,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             const selected = tab.getAttribute('data-tab');
             document.getElementById('usersSection').style.display = selected === 'users' ? 'block' : 'none';
             document.getElementById('ticketsSection').style.display = selected === 'tickets' ? 'block' : 'none';
+            document.getElementById('ordersSection').style.display = selected === 'orders' ? 'block' : 'none';
         });
     });
 
+    async function loadOrders() {
+    try {
+        const res = await fetch('http://localhost:5000/api/admin/orders', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok) {
+            const tbody = document.getElementById('ordersTableBody');
+            if (data.orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; text-align: center; color: #9ca3af;">No hay órdenes registradas en el sistema.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = data.orders.map(o => `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 12px; font-family: monospace; color: #3b82f6;">#${o.requestId}</td>
+                    <td style="padding: 12px; font-weight: 500;">${o.deviceModel} <span style="font-size: 11px; color: #9ca3af; display: block;">${o.deviceCategory}</span></td>
+                    <td style="padding: 12px; color: #e5e7eb;">${o.clientId ? o.clientId.name : 'N/A'}</td>
+                    <td style="padding: 12px; color: #e5e7eb;">${o.technicianId ? o.technicianId.name : 'Sin asignar'}</td>
+                    <td style="padding: 12px;"><span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; text-transform: uppercase;">${o.status}</span></td>
+                    <td style="padding: 12px; color: #10b981; font-weight: 600;">${o.priceQuote ? '$' + o.priceQuote.toLocaleString('es-CO') : 'Pendiente'}</td>
+                </tr>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error cargando órdenes globales:', error);
+    }
+}
+    loadOrders();
     loadStats();
     loadUsers();
     loadTickets();

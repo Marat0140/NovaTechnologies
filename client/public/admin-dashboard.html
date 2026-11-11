@@ -17,7 +17,7 @@
                 <span class="brand-icon">⚡</span>
                 <span class="brand-name">Nova Technologies <span style="font-size: 12px; background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 10px; margin-left: 5px;">Administrador</span></span>
             </a>
-            
+
             <nav class="navbar-links" style="display: flex; gap: 20px; align-items: center;">
                 <a href="#" id="logoutBtn" style="color: #ef4444; text-decoration: none; font-weight: 500;">Cerrar Sesión</a>
             </nav>
@@ -51,6 +51,7 @@
         <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
             <button class="admin-tab active" data-tab="users" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #3b82f6; background: #3b82f6; color: white; cursor: pointer; font-weight: 500;">Gestión de Usuarios</button>
             <button class="admin-tab" data-tab="tickets" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #374151; background: #1f2937; color: #9ca3af; cursor: pointer; font-weight: 500;">Solicitudes de Soporte</button>
+            <button class="admin-tab" data-tab="orders" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #374151; background: #1f2937; color: #9ca3af; cursor: pointer; font-weight: 500;">Órdenes Globales</button>
         </div>
 
         <!-- Vista de Usuarios -->
@@ -73,6 +74,28 @@
                 </table>
             </div>
         </div>
+
+        <!-- Vista de Órdenes Globales -->
+    <div id="ordersSection" style="display: none; background: #111827; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 25px;">
+        <h2 style="font-size: 18px; margin-bottom: 15px; color: #fff;">Supervisión de Todas las Órdenes</h2>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #9ca3af;">
+                        <th style="padding: 12px;">ID Orden</th>
+                        <th style="padding: 12px;">Dispositivo</th>
+                        <th style="padding: 12px;">Cliente</th>
+                        <th style="padding: 12px;">Técnico</th>
+                        <th style="padding: 12px;">Estado</th>
+                        <th style="padding: 12px;">Presupuesto</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr><td colspan="6" style="padding: 20px; text-align: center; color: #9ca3af;">Cargando órdenes...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
         <!-- Vista de Tickets de Soporte -->
         <div id="ticketsSection" style="display: none; background: #111827; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 25px;">

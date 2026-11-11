@@ -90,4 +90,17 @@ router.post('/contact', async (req, res) => {
   }
 });
 
+// Obtener todas las órdenes de reparación globales (Admin)
+router.get('/orders', verifyAdmin, async (req, res) => {
+  try {
+    const orders = await RepairRequest.find()
+      .populate('clientId', 'name email')
+      .populate('technicianId', 'name email')
+      .sort({ createdAt: -1 });
+    res.json({ orders });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener las órdenes globales.', error: error.message });
+  }
+});
+
 module.exports = router;
