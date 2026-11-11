@@ -15,6 +15,7 @@ import TechnicianProfile from './views/TechnicianProfile';
 import CreateRequest from './views/CreateRequest';
 import RepairChat from './views/RepairChat';
 import Contact from './views/Contact';
+import AdminDashboard from './views/AdminDashboard';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route path="/technician-dashboard" element={<TechnicianDashboard />} />
         <Route path="/technician-profile" element={<TechnicianProfile />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/create-request" element={<CreateRequest />} />
         <Route path="/repair-chat" element={<RepairChat />} />
         <Route path="/contact" element={<Contact />} />

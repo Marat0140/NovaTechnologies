@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
 
-  // Lógica para que el carrusel rote automáticamente como en tu HTML original
+  // Lógica para que el carrusel rote automáticamente
   useEffect(() => {
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
@@ -21,9 +21,7 @@ export default function Home() {
 
   return (
     <>
-      {/* ==========================================
-           BARRA DE NAVEGACIÓN (NAVBAR)
-           ========================================== */}
+      {/* BARRA DE NAVEGACIÓN (NAVBAR) */}
       <header className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-brand">
@@ -47,9 +45,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ==========================================
-           HERO SECTION CON CARRUSEL / SLIDER ROTATIVO
-           ========================================== */}
+      {/* HERO SECTION CON CARRUSEL / SLIDER ROTATIVO */}
       <section className="hero-section">
         <div className="hero-container">
           {/* Carrusel Rotativo */}
@@ -108,9 +104,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ==========================================
-           SECCIÓN SOBRE NOSOTROS (EMPRESA)
-           ========================================== */}
+      {/* SECCIÓN SOBRE NOSOTROS (EMPRESA) */}
       <section id="about" className="about-section">
         <div className="about-container">
           <div className="section-header">
@@ -134,9 +128,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ==========================================
-           CATÁLOGO DE SERVICIOS Y CATEGORÍAS
-           ========================================== */}
+      {/* CATÁLOGO DE SERVICIOS Y CATEGORÍAS */}
       <section id="services" className="services-section">
         <div className="services-container">
           <div className="section-header">
@@ -169,9 +161,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ==========================================
-           BOTÓN FLOTANTE DE IA (ÚNICAMENTE EL BOTÓN)
-           ========================================== */}
+      {/* BOTÓN FLOTANTE DE IA */}
       <div className="ai-widget-container">
         <button className="ai-fab-btn" aria-label="Asistente IA">
             <span className="ai-fab-icon">🤖</span>
@@ -179,15 +169,13 @@ export default function Home() {
         </button>
       </div>
 
-      {/* ==========================================
-           FOOTER INSTITUCIONAL
-           ========================================== */}
+      {/* FOOTER INSTITUCIONAL */}
       <footer className="footer">
         <div className="footer-container">
             <p>&copy; 2026 Nova Technologies. Todos los derechos reservados.</p>
             <div className="footer-links">
                 <a href="#terms">Términos y Condiciones</a>
-                <a href="#contact">Centro de Soporte</a>
+                <Link to="/Contact">Centro de Soporte</Link>
             </div>
         </div>
       </footer>
