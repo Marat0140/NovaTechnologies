@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import AIChatWidget from '../components/AIChatWidget';
 
 export default function ClientDashboard() {
   const navigate = useNavigate();
@@ -211,7 +212,7 @@ export default function ClientDashboard() {
 
       {/* Widget Flotante de IA */}
       <AIChatWidget />
-      
+
     </div>
   );
 }
