@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import AIChatWidget from '../components/AIChatWidget';
 
 export default function Home() {
 
@@ -162,12 +163,7 @@ export default function Home() {
       </section>
 
       {/* BOTÓN FLOTANTE DE IA */}
-      <div className="ai-widget-container">
-        <button className="ai-fab-btn" aria-label="Asistente IA">
-            <span className="ai-fab-icon">🤖</span>
-            <span className="ai-pulse-ring"></span>
-        </button>
-      </div>
+      <AIChatWidget />
 
       {/* FOOTER INSTITUCIONAL */}
       <footer className="footer">

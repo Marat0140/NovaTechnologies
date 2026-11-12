@@ -274,6 +274,9 @@ export default function AdminDashboard() {
 
       </main>
 
+      {/* Widget Flotante de IA */}
+      <AIChatWidget />
+
     </div>
   );
 }

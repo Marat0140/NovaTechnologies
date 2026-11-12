@@ -210,32 +210,8 @@ export default function ClientDashboard() {
       </main>
 
       {/* Widget Flotante de IA */}
-      <div className="ai-widget-container" style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: '9999' }}>
-        <button 
-          onClick={() => setIsAiOpen(!isAiOpen)}
-          aria-label="Abrir Asistente IA" 
-          style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#3b82f6', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px' }}
-        >
-          🤖
-        </button>
-
-        {isAiOpen && (
-          <div className="ai-chat-popup" style={{ position: 'absolute', bottom: '75px', right: '0', width: '320px', background: '#111827', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}>
-            <div className="ai-chat-header" style={{ background: '#1f2937', padding: '12px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #374151' }}>
-              <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>⚡ Asistente Nova IA</span>
-              <button onClick={() => setIsAiOpen(false)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: '18px', cursor: 'pointer' }}>&times;</button>
-            </div>
-            <div className="ai-chat-body" style={{ padding: '15px', height: '250px', overflowY: 'auto', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ background: '#1f2937', padding: '10px', borderRadius: '8px', maxWidth: '85%', color: '#fff' }}>¡Hola! Soy tu asistente técnico. ¿Qué falla presenta tu equipo?</div>
-            </div>
-            <div className="ai-chat-footer" style={{ padding: '10px', background: '#1f2937', display: 'flex', gap: '8px', borderTop: '1px solid #374151' }}>
-              <input type="text" placeholder="Consulta con la IA..." style={{ flex: 1, background: '#111827', border: '1px solid #374151', padding: '8px', borderRadius: '6px', color: '#fff', fontSize: '12px' }} />
-              <button style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>Enviar</button>
-            </div>
-          </div>
-        )}
-      </div>
-
+      <AIChatWidget />
+      
     </div>
   );
 }
