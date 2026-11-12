@@ -13,6 +13,15 @@ export default function AIChatWidget() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen]);
 
+  {isOpen && (
+  <div 
+    className="ai-chat-window"
+    style={{ position: 'absolute', bottom: '75px', right: 0, width: '330px', background: '#111827', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column' }}
+  >
+    {/* ... resto del chat ... */}
+  </div>
+)}
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim() || loading) return;

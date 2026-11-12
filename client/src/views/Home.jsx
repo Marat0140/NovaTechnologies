@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AIChatWidget from '../components/AIChatWidget';
+import Navbar from '../components/Navbar';
 
 export default function Home() {
 
@@ -24,26 +25,7 @@ export default function Home() {
     <>
       {/* BARRA DE NAVEGACIÓN (NAVBAR) */}
       <header className="navbar">
-        <div className="navbar-container">
-          <Link to="/" className="navbar-brand">
-            <span className="brand-icon">⚡</span>
-            <span className="brand-name">Nova Technologies</span>
-          </Link>
-          
-          <nav className="navbar-links">
-            <Link to="/" className="nav-link active">Inicio</Link>
-            <a href="#about" className="nav-link">Sobre Nosotros</a>
-            <a href="#services" className="nav-link">Especialidades</a>
-            <Link to="/login?mode=register" className="nav-link">Cotizar Reparación</Link>
-            <Link to="/contact" className="nav-link" style={{ color: '#9ca3af', textDecoration: 'none' }}>Soporte</Link>
-            <a href="#terms" className="nav-link">Garantías</a>
-          </nav>
-
-          <div className="navbar-actions">
-            <Link to="/login?mode=login" className="btn btn-outline">Iniciar Sesión</Link>
-            <Link to="/login?mode=register" className="btn btn-primary">Registrarse</Link>
-          </div>
-        </div>
+        <Navbar role="guest" />
       </header>
 
       {/* HERO SECTION CON CARRUSEL / SLIDER ROTATIVO */}
