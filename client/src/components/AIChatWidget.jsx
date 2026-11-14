@@ -32,7 +32,7 @@ export default function AIChatWidget() {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/ai/diagnose', {
+      const res = await fetch('${API_URL}/api/ai/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: userMessage })
