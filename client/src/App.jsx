@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Router, Routes, Route, Navigate } from 'react-router-dom';
 
 // Importación de tus estilos CSS
 import './global.css';
@@ -19,7 +19,7 @@ import AdminDashboard from './views/AdminDashboard';
 
 function App() {
   return (
-    <Router>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -32,7 +32,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </Router>
+    
   );
 }
 

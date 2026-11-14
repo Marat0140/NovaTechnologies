@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   const fetchAllAdminData = async (token) => {
     try {
       // 1. Estadísticas
-      const resStats = await fetch('http://localhost:5000/api/admin/stats', {
+      const resStats = await fetch('https://proyecto-avanzado-jc.onrender.com/api/admin/stats', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const dataStats = await resStats.json();
@@ -36,21 +36,21 @@ export default function AdminDashboard() {
       if (resStats.ok) setStats(dataStats);
 
       // 2. Usuarios
-      const resUsers = await fetch('http://localhost:5000/api/admin/users', {
+      const resUsers = await fetch('https://proyecto-avanzado-jc.onrender.com/api/admin/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const dataUsers = await resUsers.json();
       if (resUsers.ok) setUsers(dataUsers.users);
 
       // 3. Órdenes Globales
-      const resOrders = await fetch('http://localhost:5000/api/admin/orders', {
+      const resOrders = await fetch('https://proyecto-avanzado-jc.onrender.com/api/admin/orders', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const dataOrders = await resOrders.json();
       if (resOrders.ok) setOrders(dataOrders.orders);
 
       // 4. Tickets de Soporte
-      const resTickets = await fetch('http://localhost:5000/api/admin/tickets', {
+      const resTickets = await fetch('https://proyecto-avanzado-jc.onrender.com/api/admin/tickets', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const dataTickets = await resTickets.json();
@@ -73,7 +73,7 @@ export default function AdminDashboard() {
   const handleResolveTicket = async (ticketId) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/tickets/${ticketId}/status`, {
+      const res = await fetch(`https://proyecto-avanzado-jc.onrender.com/api/admin/tickets/${ticketId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ status: 'resolved' })

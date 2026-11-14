@@ -50,7 +50,7 @@ export default function RepairChat() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/details`, {
+      const res = await fetch(`https://proyecto-avanzado-jc.onrender.com/api/repairs/${requestId}/details`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -74,7 +74,7 @@ export default function RepairChat() {
 
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/chat`, {
+      const res = await fetch(`https://proyecto-avanzado-jc.onrender.com/api/repairs/${requestId}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export default function RepairChat() {
   const handleAction = async (endpoint, bodyData = {}) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/${endpoint}`, {
+      const res = await fetch(`https://proyecto-avanzado-jc.onrender.com/api/repairs/${requestId}/${endpoint}`, {
         method: endpoint === 'request-completion-otp' ? 'POST' : 'PUT',
         headers: {
           'Content-Type': 'application/json',

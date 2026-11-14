@@ -19,7 +19,7 @@ export default function TechnicianDashboard() {
 
   const loadTechnicianRequests = async (token) => {
     try {
-      const res = await fetch('http://localhost:5000/api/repairs/technician-requests', {
+      const res = await fetch('https://proyecto-avanzado-jc.onrender.com/api/repairs/technician-requests', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -47,7 +47,7 @@ export default function TechnicianDashboard() {
 
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/repairs/${requestId}/accept`, {
+      const res = await fetch(`https://proyecto-avanzado-jc.onrender.com/api/repairs/${requestId}/accept`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

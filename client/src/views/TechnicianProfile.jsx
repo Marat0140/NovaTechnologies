@@ -29,7 +29,7 @@ export default function TechnicianProfile() {
 
   const fetchTechnicianProfile = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/technicians/${id}`);
+      const res = await fetch(`https://proyecto-avanzado-jc.onrender.com/api/technicians/${id}`);
       const data = await res.json();
 
       if (res.ok) {

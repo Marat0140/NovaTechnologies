@@ -26,7 +26,7 @@ export default function ClientDashboard() {
   // Obtener técnicos de la API
   const fetchTechnicians = async (token) => {
     try {
-      const res = await fetch('http://localhost:5000/api/technicians', {
+      const res = await fetch('https://proyecto-avanzado-jc.onrender.com/api/technicians', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -44,7 +44,7 @@ export default function ClientDashboard() {
   // Obtener solicitudes o "Garaje" del cliente
   const fetchClientRequests = async (token) => {
     try {
-      const res = await fetch('http://localhost:5000/api/repairs/my-requests', {
+      const res = await fetch('https://proyecto-avanzado-jc.onrender.com/api/repairs/my-requests', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
