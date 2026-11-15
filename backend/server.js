@@ -25,9 +25,9 @@ app.use('/api/ai', require('./routes/aiRoutes'));
 
 const PORT = process.env.PORT || 5000;
 
-// Verificar que cargó bien (esto te imprimirá true si lee la URI)
+// Verificar que cargó bien (esto imprimirá true si lee la URI)
 console.log("URI cargada:", process.env.MONGO_URI ? "Sí" : "No");
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor de Nova Technologies corriendo en el puerto ${PORT}`);
+  console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });

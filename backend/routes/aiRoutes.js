@@ -23,8 +23,7 @@ router.post('/diagnose', async (req, res) => {
   } catch (error) {
     console.error('Error detallado en el asistente de IA:', error.message);
     
-    // Devolvemos una respuesta de respaldo amigable en formato JSON (status 200) 
-    // para que la interfaz nunca se rompa ni se quede bloqueada.
+    // forma para que la interfaz nunca se rompa ni se quede bloqueada.
     return res.json({ 
       reply: `Entiendo tu consulta sobre "${prompt}". En este momento la IA está ocupada o experimentando intermitencia de red, pero te sugiero crear una solicitud de cotización directamente en la plataforma para que un técnico verificado revise tu equipo.` 
     });
