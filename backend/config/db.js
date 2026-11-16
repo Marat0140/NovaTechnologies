@@ -1,6 +1,3 @@
-/* ==========================================================================
-   NOVA TECHNOLOGIES - CONEXIÓN A MONGODB ATLAS
-   ========================================================================== */
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
