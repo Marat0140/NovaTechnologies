@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import logoImg from '../assets/Logo.png';
 
 export default function CreateRequest() {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function CreateRequest() {
       <header className="navbar" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="navbar-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '15px 20px' }}>
           <Link to="/client-dashboard" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
-            <span className="brand-icon">⚡</span>
+            <img src={logoImg} alt="Nova Technologies" style={{ width: '32px', height: '32px', objectFit: 'contain', borderRadius: '6px' }} />
             <span className="brand-name">Nova Technologies</span>
           </Link>
           <nav className="navbar-links">

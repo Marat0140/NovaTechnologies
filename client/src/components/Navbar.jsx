@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import logoImg from '../assets/Logo.png';
 
 export default function Navbar({ role = 'guest' }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -7,7 +8,27 @@ export default function Navbar({ role = 'guest' }) {
   const location = useLocation();
   const token = localStorage.getItem('token');
 
-  // Saber si estamos exactamente en la página de inicio
+  // Detectar el rol real del usuario decodificando el token JWT si está disponible
+  let currentRole = role;
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (payload && payload.role) {
+        currentRole = payload.role; // 'client', 'technician', 'admin'
+      }
+    } catch (e) {
+      console.error('Error al decodificar el token:', e);
+    }
+  }
+
+  // Definir la ruta del dashboard según el rol
+  const getDashboardRoute = () => {
+    if (currentRole === 'technician') return '/technician-dashboard';
+    if (currentRole === 'admin') return '/admin-dashboard';
+    return '/client-dashboard';
+  };
+
+  const dashboardRoute = getDashboardRoute();
   const isHome = location.pathname === '/';
 
   const handleLogout = () => {
@@ -16,7 +37,6 @@ export default function Navbar({ role = 'guest' }) {
     navigate('/login');
   };
 
-  // Función para hacer scroll suave a las secciones del Home
   const scrollToSection = (sectionId) => {
     setMenuOpen(false);
     if (!isHome) {
@@ -32,12 +52,12 @@ export default function Navbar({ role = 'guest' }) {
   };
 
   return (
-    <header style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)', position: 'sticky', top: 0, zIndex: 1000 }}>
+    <header style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)', height: '70px', position: 'sticky', top: 0, zIndex: 1000 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '14px 20px' }}>
         
-        {/* Logo */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
-          <span>⚡</span>
+        {/* Logo con imagen */}
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
+          <img src={logoImg} alt="Nova Technologies" style={{ width: 'auto', height: '42px', objectFit: 'contain', borderRadius: '6px' }} />
           <span>Nova Technologies</span>
         </Link>
 
@@ -45,33 +65,33 @@ export default function Navbar({ role = 'guest' }) {
         <nav className="desktop-nav-links" style={{ display: 'flex', gap: '22px', alignItems: 'center' }}>
           <Link to="/" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Inicio</Link>
 
-          {/* Enlaces exclusivos del Home (Secciones de la página principal) */}
           {isHome && (
             <>
               <button onClick={() => scrollToSection('about')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '14px', cursor: 'pointer', padding: 0 }}>Sobre nosotros</button>
               <button onClick={() => scrollToSection('services')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '14px', cursor: 'pointer', padding: 0 }}>Servicios</button>
-              <button onClick={() => scrollToSection('warranties')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '14px', cursor: 'pointer', padding: 0 }}>Garantías</button>
+              {/*<button onClick={() => scrollToSection('warranties')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '14px', cursor: 'pointer', padding: 0 }}>Garantías</button>*/}
             </>
           )}
 
           <Link to="/contact" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Soporte / Contacto</Link>
           
-          {token && role === 'client' && (
+          {/* Enlaces si tiene sesión iniciada */}
+          {token && (
             <>
-              <Link to="/client-dashboard" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Mi Panel</Link>
-              <Link to="/create-request" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Nueva Solicitud</Link>
-            </>
-          )}
-
-          {token && role === 'technician' && (
-            <>
-              <Link to="/technician-dashboard" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Panel Técnico</Link>
-              <Link to="/technician-profile" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Mi Perfil</Link>
+              <Link to={dashboardRoute} style={{ color: '#3b82f6', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
+                🚀 Ir a mi Panel
+              </Link>
+              {currentRole === 'client' && (
+                <Link to="/create-request" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Nueva Solicitud</Link>
+              )}
+              {currentRole === 'technician' && (
+                <Link to="/technician-profile" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px' }}>Mi Perfil</Link>
+              )}
             </>
           )}
         </nav>
 
-        {/* Botones Principales + Botón Hamburguesa */}
+        {/* Botones de Autenticación */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {!token ? (
             <>
@@ -106,11 +126,10 @@ export default function Navbar({ role = 'guest' }) {
             🏠 Inicio
           </Link>
 
-          {/* Opciones del Home en el menú móvil */}
           {isHome && (
             <>
               <button onClick={() => scrollToSection('about')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '15px', textAlign: 'left', cursor: 'pointer', padding: '6px 0' }}>ℹ️ Sobre nosotros</button>
-              <button onClick={() => scrollToSection('specialties')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '15px', textAlign: 'left', cursor: 'pointer', padding: '6px 0' }}>⚙️ Especialidades</button>
+              <button onClick={() => scrollToSection('services')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '15px', textAlign: 'left', cursor: 'pointer', padding: '6px 0' }}>⚙️ Servicios</button>
               <button onClick={() => scrollToSection('warranties')} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '15px', textAlign: 'left', cursor: 'pointer', padding: '6px 0' }}>🛡️ Garantías</button>
             </>
           )}
@@ -119,26 +138,10 @@ export default function Navbar({ role = 'guest' }) {
             📞 Soporte y Contacto
           </Link>
 
-          {token && role === 'client' && (
-            <>
-              <Link to="/client-dashboard" onClick={() => setMenuOpen(false)} style={{ color: '#3b82f6', textDecoration: 'none', fontSize: '15px', padding: '6px 0', fontWeight: '500' }}>
-                📋 Mis Órdenes de Reparación
-              </Link>
-              <Link to="/create-request" onClick={() => setMenuOpen(false)} style={{ color: '#10b981', textDecoration: 'none', fontSize: '15px', padding: '6px 0', fontWeight: '500' }}>
-                ➕ Solicitar Nueva Reparación
-              </Link>
-            </>
-          )}
-
-          {token && role === 'technician' && (
-            <>
-              <Link to="/technician-dashboard" onClick={() => setMenuOpen(false)} style={{ color: '#3b82f6', textDecoration: 'none', fontSize: '15px', padding: '6px 0', fontWeight: '500' }}>
-                🛠️ Panel de Trabajos
-              </Link>
-              <Link to="/technician-profile" onClick={() => setMenuOpen(false)} style={{ color: '#10b981', textDecoration: 'none', fontSize: '15px', padding: '6px 0', fontWeight: '500' }}>
-                👤 Mi Perfil Técnico
-              </Link>
-            </>
+          {token && (
+            <Link to={dashboardRoute} onClick={() => setMenuOpen(false)} style={{ color: '#3b82f6', textDecoration: 'none', fontSize: '15px', padding: '6px 0', fontWeight: '600' }}>
+              🚀 Ir a mi Panel de Control
+            </Link>
           )}
         </div>
       )}

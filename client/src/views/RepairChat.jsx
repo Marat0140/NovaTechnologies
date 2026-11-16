@@ -70,7 +70,7 @@ export default function RepairChat() {
   // Enviar mensaje de texto
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || isChatLocked) return;
 
     const token = localStorage.getItem('token');
     try {
@@ -83,9 +83,12 @@ export default function RepairChat() {
         body: JSON.stringify({ message: newMessage })
       });
 
+      const data = await res.json();
       if (res.ok) {
         setNewMessage('');
         fetchChatData(token);
+      } else {
+        alert(data.message || 'No se pudo enviar el mensaje.');
       }
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
@@ -128,7 +131,21 @@ export default function RepairChat() {
     handleAction('confirm-cancellation', { otp: cancelOtpValue.trim() });
   };
 
-  const isLocked = currentRequest && (currentRequest.status === 'completed' || currentRequest.status === 'cancelled');
+  // Control de estados
+  const isOrderClosed = currentRequest && (currentRequest.status === 'completed' || currentRequest.status === 'cancelled');
+  const isAwaitingApproval = currentRequest && (currentRequest.status === 'pending' || currentRequest.status === 'quoted');
+  const isChatLocked = isOrderClosed || isAwaitingApproval;
+
+  // Mensaje dinámico para el input bloqueado
+  const getChatPlaceholder = () => {
+    if (isOrderClosed) {
+      return `Esta orden ya ha sido ${currentRequest?.status === 'cancelled' ? 'cancelada' : 'completada'}. Chat bloqueado.`;
+    }
+    if (isAwaitingApproval) {
+      return 'El chat se habilitará cuando el cliente acepte el presupuesto inicial...';
+    }
+    return 'Escribe un mensaje...';
+  };
 
   return (
     <div style={{ backgroundColor: '#0b0f19', color: '#ffffff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -170,18 +187,35 @@ export default function RepairChat() {
         )}
 
         {/* Panel Interactivo Dinámico */}
-        {currentRequest && !isLocked && (
+        {currentRequest && !isOrderClosed && (
           <div style={{ background: '#1f2937', border: '1px solid #374151', borderRadius: '12px', padding: '15px', marginBottom: '15px' }}>
             
-            {/* 1. CLIENTE: Cotización inicial */}
+            {/* 0. AVISO DE ESPERA ANTES DE HABILITAR EL CHAT */}
+            {isAwaitingApproval && userRole === 'technician' && (
+              <p style={{ margin: 0, fontSize: '13px', color: '#9ca3af', textAlign: 'center' }}>
+                ⏳ Esperando a que el cliente acepte el presupuesto inicial para habilitar el chat y comenzar la reparación.
+              </p>
+            )}
+
+            {currentRequest.status === 'pending' && userRole === 'client' && (
+              <p style={{ margin: 0, fontSize: '13px', color: '#9ca3af', textAlign: 'center' }}>
+                ⏳ El técnico está revisando tu solicitud. Cuando envíe el presupuesto inicial podrás aceptarlo o rechazarlo aquí.
+              </p>
+            )}
+
+            {/* 1. CLIENTE: Cotización inicial (Sin OTP ni pago de revisión al rechazar) */}
             {userRole === 'client' && currentRequest.status === 'quoted' && (
               <div>
                 <p style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#fbbf24' }}>
-                  ⚡ El técnico ha cotizado esta reparación en <strong>${currentRequest.priceQuote.toLocaleString('es-CO')} COP</strong>.
+                  El técnico ha cotizado esta reparación en <strong>${currentRequest.priceQuote.toLocaleString('es-CO')} COP</strong>. Acepta para habilitar el chat e iniciar el servicio.
                 </p>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  <button onClick={() => handleAction('respond-quote', { action: 'accept' })} style={{ flex: 1, background: '#10b981', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>Aceptar Presupuesto</button>
-                  <button onClick={() => handleAction('respond-quote', { action: 'reject' })} style={{ flex: 1, background: '#ef4444', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>Rechazar (Pagar Revisión)</button>
+                  <button onClick={() => handleAction('respond-quote', { action: 'accept' })} style={{ flex: 1, background: '#10b981', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>
+                    Aceptar Presupuesto
+                  </button>
+                  <button onClick={() => handleAction('respond-quote', { action: 'reject' })} style={{ flex: 1, background: '#ef4444', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>
+                    Rechazar Presupuesto
+                  </button>
                 </div>
               </div>
             )}
@@ -194,7 +228,7 @@ export default function RepairChat() {
               </div>
             )}
 
-            {/* 3. CLIENTE: Propuesta de cambio de precio */}
+            {/* 3. CLIENTE: Propuesta de cambio de precio (Segundo presupuesto en curso) */}
             {userRole === 'client' && currentRequest.priceModification && currentRequest.priceModification.status === 'pending' && (
               <div>
                 <p style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#f59e0b' }}>
@@ -229,10 +263,10 @@ export default function RepairChat() {
               </div>
             )}
 
-            {/* 6. TÉCNICO: Validar OTP de cancelación */}
+            {/* 6. TÉCNICO: Validar OTP de cancelación (Solo si rechazó un cambio de precio en curso) */}
             {userRole === 'technician' && currentRequest.status === 'pending_cancellation' && (
               <div>
-                <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#ef4444' }}>El cliente canceló la orden. Ingresa el OTP de cancelación tras recibir el pago de revisión ({currentRequest.cancellationOtp}):</p>
+                <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#ef4444' }}>El cliente rechazó el nuevo precio. Ingresa el OTP de cancelación tras recibir el pago de revisión ({currentRequest.cancellationOtp}):</p>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <input 
                     type="text" 
@@ -249,10 +283,21 @@ export default function RepairChat() {
           </div>
         )}
 
+        {/* Aviso si la orden fue cancelada */}
+        {currentRequest && currentRequest.status === 'cancelled' && (
+          <div style={{ background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '12px', padding: '14px', marginBottom: '15px', textAlign: 'center', color: '#fca5a5', fontSize: '14px' }}>
+            ❌ Esta solicitud de reparación ha sido cancelada.
+          </div>
+        )}
+
         {/* Caja de Mensajes */}
         <div style={{ flex: 1, minHeight: '350px', maxHeight: '480px', background: '#111827', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '15px' }}>
           {messages.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '13px' }}>No hay mensajes aún. Inicia la conversación.</p>
+            <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '13px' }}>
+              {isAwaitingApproval 
+                ? '🔒 El chat está bloqueado hasta que el cliente acepte el presupuesto inicial.' 
+                : 'No hay mensajes aún. Inicia la conversación.'}
+            </p>
           ) : (
             messages.map((msg, index) => {
               const isMine = msg.senderId === currentUserId;
@@ -281,15 +326,15 @@ export default function RepairChat() {
             type="text" 
             value={newMessage} 
             onChange={(e) => setNewMessage(e.target.value)} 
-            placeholder={isLocked ? `Esta orden ya ha sido ${currentRequest?.status}. Chat bloqueado.` : 'Escribe un mensaje...'} 
-            disabled={isLocked}
-            style={{ flex: 1, background: '#1f2937', border: '1px solid #374151', padding: '14px', borderRadius: '10px', color: '#fff', fontSize: '14px', opacity: isLocked ? 0.5 : 1 }} 
-            required={!isLocked}
+            placeholder={getChatPlaceholder()} 
+            disabled={isChatLocked}
+            style={{ flex: 1, background: '#1f2937', border: '1px solid #374151', padding: '14px', borderRadius: '10px', color: '#fff', fontSize: '14px', opacity: isChatLocked ? 0.5 : 1 }} 
+            required={!isChatLocked}
           />
           <button 
             type="submit" 
-            disabled={isLocked}
-            style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '0 25px', borderRadius: '10px', fontWeight: '600', cursor: isLocked ? 'not-allowed' : 'pointer', transition: '0.2s', opacity: isLocked ? 0.5 : 1 }}
+            disabled={isChatLocked}
+            style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '0 25px', borderRadius: '10px', fontWeight: '600', cursor: isChatLocked ? 'not-allowed' : 'pointer', transition: '0.2s', opacity: isChatLocked ? 0.5 : 1 }}
           >
             Enviar
           </button>

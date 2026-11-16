@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import AIChatWidget from '../components/AIChatWidget';
 import Navbar from '../components/Navbar';
 
+
 export default function Home() {
 
   // Lógica para que el carrusel rote automáticamente
@@ -49,13 +50,13 @@ export default function Home() {
             <div className="slide">
               <div className="hero-content">
                 <span className="badge badge-warning">Transparencia en el Precio</span>
-                <h1 className="hero-title">Presupuestos claros y pagos blindados por código OTP</h1>
+                <h1 className="hero-title">Cotización inicial de revisión y pagos blindados con OTP</h1>
                 <p className="hero-description">
-                  Sin sorpresas ni cobros ocultos. Valida tu presupuesto en línea y libera el pago al taller únicamente cuando el servicio haya finalizado con éxito.
+                  El primer presupuesto corresponde a la revisión y diagnóstico inicial (puede ajustarse tras inspeccionar el equipo). Siempre tú decides si apruebas cualquier cambio antes de reparar.
                 </p>
                 <div className="hero-buttons">
                   <Link to="/login?mode=register" className="btn btn-primary">Empezar Ahora</Link>
-                  <a href="#terms" className="btn btn-outline">Conocer Políticas</a>
+                  <Link to="/terms" className="btn btn-outline">Conocer Políticas</Link>
                 </div>
               </div>
             </div>
@@ -76,11 +77,11 @@ export default function Home() {
           {/* Panel Lateral / Vista Previa */}
           <div className="hero-visual">
             <div className="card hero-card-preview">
-              <h3>⚡ Garantía Nova Technologies</h3>
+              <h3>Garantía Nova Technologies</h3>
               <ul className="preview-list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--text-secondary)', marginTop: '12px' }}>
                 <li>✔️ Técnicos verificados por calificaciones reales.</li>
+                <li>✔️ Presupuesto transparente: La primera cotización cubre revisión inicial y puede variar tras el diagnóstico físico, siempre bajo tu aprobación.</li>
                 <li>✔️ Seguimiento paso a paso del estado de tu equipo.</li>
-                <li>✔️ Historial de reparaciones en tu Garaje personal.</li>
               </ul>
             </div>
           </div>
@@ -152,7 +153,7 @@ export default function Home() {
         <div className="footer-container">
             <p>&copy; 2026 Nova Technologies. Todos los derechos reservados.</p>
             <div className="footer-links">
-                <a href="#terms">Términos y Condiciones</a>
+                <Link to="/terms">Términos y Condiciones</Link>
                 <Link to="/Contact">Centro de Soporte</Link>
             </div>
         </div>

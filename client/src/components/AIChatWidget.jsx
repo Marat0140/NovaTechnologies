@@ -32,7 +32,7 @@ export default function AIChatWidget() {
     setLoading(true);
 
     try {
-      const res = await fetch('${API_URL}/api/ai/diagnose', {
+      const res = await fetch('https://proyecto-avanzado-jc.onrender.com/api/ai/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: userMessage })
@@ -65,7 +65,7 @@ export default function AIChatWidget() {
       {isOpen && (
         <div style={{ position: 'absolute', bottom: '75px', right: 0, width: '330px', background: '#111827', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column' }}>
           <div style={{ background: '#1f2937', padding: '12px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #374151' }}>
-            <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>⚡ Diagnóstico Nova IA</span>
+            <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#fff' }}>Diagnóstico Nova IA</span>
             <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '20px', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
           </div>
 

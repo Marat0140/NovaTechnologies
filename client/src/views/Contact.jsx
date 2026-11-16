@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logoImg from '../assets/Logo.png';
 
 export default function Contact() {
   const [name, setName] = useState('');
@@ -40,10 +41,10 @@ export default function Contact() {
     <div style={{ backgroundColor: '#0b0f19', color: '#ffffff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
 
       {/* Navbar */}
-      <header className="navbar" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <div className="navbar-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '15px 20px' }}>
-          <Link to="/" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
-            <span className="brand-icon">⚡</span>
+      <header className="navbar" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)', height: '70px', display: 'flex', alignItems: 'center' }}>
+        <div className="navbar-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <Link to="/" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
+            <img src={logoImg} alt="Nova Technologies" style={{ height: '42px', width: 'auto', objectFit: 'contain', borderRadius: '6px' }} />
             <span className="brand-name">Nova Technologies</span>
           </Link>
           <nav className="navbar-links" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>

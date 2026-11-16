@@ -16,6 +16,7 @@ import CreateRequest from './views/CreateRequest';
 import RepairChat from './views/RepairChat';
 import Contact from './views/Contact';
 import AdminDashboard from './views/AdminDashboard';
+import TermsAndConditions from './views/TermsAndConditions';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route path="/technician-dashboard" element={<TechnicianDashboard />} />
         <Route path="/technician-profile" element={<TechnicianProfile />} />

@@ -70,6 +70,7 @@ export default function Login() {
       if (res.ok) {
         if (data.needsRoleSelection) {
           setPendingAuthData({ authType: 'google', credential: response.credential });
+          setModalName('');
           setModalStep(1);
         } else {
           localStorage.setItem('token', data.token);
@@ -183,7 +184,7 @@ export default function Login() {
 
   const submitCompleteRegistration = async (dataPayload) => {
     try {
-      const res = await fetch('http://localhost:5000/api/auth/complete-registration', {
+      const res = await fetch('https://proyecto-avanzado-jc.onrender.com/api/auth/complete-registration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataPayload)
@@ -216,7 +217,6 @@ export default function Login() {
         {/* Logo y Retorno */}
         <div className="auth-header">
           <Link to="/" className="navbar-brand" style={{ justifyContent: 'center', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span className="brand-icon">⚡</span>
             <span className="brand-name">Nova Technologies</span>
           </Link>
           <h1>{isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión'}</h1>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AIChatWidget from '../components/AIChatWidget';
+import logoImg from '../assets/Logo.png';
 
 export default function ClientDashboard() {
   const navigate = useNavigate();
@@ -9,7 +10,6 @@ export default function ClientDashboard() {
   const [clientRequests, setClientRequests] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [loadingTechs, setLoadingTechs] = useState(true);
-  const [isAiOpen, setIsAiOpen] = useState(false);
 
   // Verificar autenticación al cargar
   useEffect(() => {
@@ -77,10 +77,10 @@ export default function ClientDashboard() {
     <div style={{ backgroundColor: '#0b0f19', color: '#ffffff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       
       {/* Navbar del Cliente */}
-      <header className="navbar" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <div className="navbar-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '15px 20px' }}>
-          <Link to="/client-dashboard" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
-            <span className="brand-icon">⚡</span>
+      <header className="navbar" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.1)', height: '70px', display: 'flex', alignItems: 'center' }}>
+        <div className="navbar-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <Link to="/client-dashboard" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
+            <img src={logoImg} alt="Nova Technologies" style={{ height: '42px', width: 'auto', objectFit: 'contain', borderRadius: '6px' }} />
             <span className="brand-name">Nova Technologies <span style={{ fontSize: '12px', background: '#3b82f6', padding: '2px 8px', borderRadius: '10px', marginLeft: '5px' }}>Cliente</span></span>
           </Link>
           
