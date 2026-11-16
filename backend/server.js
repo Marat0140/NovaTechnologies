@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db');
 
-// Cargar variables de entorno desde el archivo .env en la raíz
+// Cargar variables de entorno desde el archivo .env
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // Conectar a la base de datos de MongoDB Atlas
@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Rutas de la API (las iremos conectando paso a paso)
+// Rutas de la API
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/technicians', require('./routes/userRoutes'));
 app.use('/api/repairs', require('./routes/repairRoutes'));
