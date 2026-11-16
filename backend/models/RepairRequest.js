@@ -21,7 +21,7 @@ const repairRequestSchema = new mongoose.Schema({
   // Control de estados de la reparación
   status: { 
     type: String, 
-    enum: ['pending', 'accepted', 'in_diagnosis', 'quoted', 'in_repair', 'completed', 'cancelled'], 
+    enum: ['pending', 'accepted', 'in_diagnosis', 'quoted', 'in_repair', 'pending_cancellation', 'completed', 'cancelled'], 
     default: 'pending' 
   },
   

@@ -70,7 +70,7 @@ router.post('/:requestId/chat', verifyToken, async (req, res) => {
   }
 });
 
-// 1. Obtener solicitudes asignadas al técnico autenticado
+//Obtener solicitudes asignadas al técnico autenticado
 router.get('/technician-requests', verifyToken, async (req, res) => {
   try {
     const requests = await RepairRequest.find({ technicianId: req.user.id })
@@ -82,7 +82,7 @@ router.get('/technician-requests', verifyToken, async (req, res) => {
   }
 });
 
-// 2. Aceptar orden y asignar presupuesto
+// Aceptar orden y asignar presupuesto
 router.put('/:id/accept', verifyToken, async (req, res) => {
   try {
     const { priceQuote } = req.body;
@@ -232,7 +232,7 @@ router.post('/:id/request-completion-otp', verifyToken, async (req, res) => {
 // 6. Técnico ingresa OTP de finalización para marcar como completado
 router.put('/:id/complete', verifyToken, async (req, res) => {
   try {
-    const { otp } = res.req.body;
+    const { otp } = req.body;
     const request = await RepairRequest.findById(req.params.id);
     if (!request) return res.status(404).json({ message: 'Orden no encontrada.' });
 
